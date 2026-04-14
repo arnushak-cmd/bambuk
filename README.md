@@ -6,5 +6,5 @@
 ## запуск
 
 pip install -r requirements.txt
-python generator.py               # -> sample_bookings.csv
-python enrichment.py --dry-run    # без реальных запросов
+python generator.py               
+python enrichment.py --dry-run    
