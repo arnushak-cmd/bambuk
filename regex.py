@@ -1,7 +1,8 @@
 import re
 
-# в координатах запятая как десятичный разделитель, поля через точку с запятой — не путается
-# в ipv6 группе точка для mapped ipv4 типа ::ffff:192.168.1.1
+# 7 групп: id, ipv6, оплата, lon, lat, заезд, выезд
+# запятая в координатах не мешает потому что поля через ;
+# в ipv6 группе точка нужна для mapped ipv4 (::ffff:192.168.1.1)
 
 pattern = re.compile(
     r"^(\d{9})"
@@ -17,6 +18,7 @@ fields = ["id", "ipv6", "paid_at", "lon", "lat", "checkin", "checkout"]
 
 
 def parse(line):
+    """None если строка кривая"""
     m = pattern.match(line.strip())
     if not m:
         return None
@@ -24,6 +26,7 @@ def parse(line):
 
 
 if __name__ == "__main__":
+    # просто проверка что работает
     test = "438291056;2001:0db8:85a3::7334;2024-07-12 09:34:17;24,56;56,83;2024-08-01;2024-08-05"
     row = parse(test)
     if row:
