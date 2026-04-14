@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 from regex import parse
 
+# разные форматы ipv6 чтоб проверить что regex всё жуёт
 ipv6_pool = [
     "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
     "fd12:3456:789a:1::1",
@@ -17,7 +18,7 @@ ipv6_pool = [
     "2a00:1450:4001:0801::200e",
 ]
 
-# специально набрал разные регионы чтоб были + и - координаты
+# набрал разные регионы — + и - координаты, оба полушария
 places = [
     (24.56, 56.83),     # рига
     (-3.71, 40.42),     # мадрид
@@ -36,13 +37,15 @@ def make_one():
     bid = random.randint(100_000_000, 999_999_999)
     ip = random.choice(ipv6_pool)
 
+    # оплата где-то в 2023-2025
     t0 = datetime(2023, 1, 1)
     paid = t0 + timedelta(seconds=random.randint(0, 1095 * 86400))
 
     lon, lat = random.choice(places)
-    lon_s = f"{lon:.2f}".replace(".", ",")
+    lon_s = f"{lon:.2f}".replace(".", ",")  # точку на запятую как в формате
     lat_s = f"{lat:.2f}".replace(".", ",")
 
+    # заезд 1-90 дней после оплаты, живут 1-14 дней
     checkin = paid.date() + timedelta(days=random.randint(1, 90))
     checkout = checkin + timedelta(days=random.randint(1, 14))
 
@@ -58,6 +61,7 @@ if __name__ == "__main__":
     n = int(sys.argv[1]) if len(sys.argv) > 1 else 10
     lines = generate(n)
 
+    # прогоняем через regex чтоб убедиться
     ok = sum(1 for s in lines if parse(s))
     print(f"сгенерил {n}, regex прошли {ok}/{n}")
 
