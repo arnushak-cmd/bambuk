@@ -1,10 +1,8 @@
-# bambuk take-home
+# bambuk
 
-take-home задание на аналитика в «Бамбук» (сервис бронирования загородных домиков).
+задание в «Бамбук» (сервис бронирования загородных домиков).
 
 лог на 6кк+ бронирований за 2023-2025, поля через `;`
-
-## что тут лежит
 
 - `regex.py` — парсинг строк лога
 - `generator.py` — генерит тестовые данные
@@ -13,10 +11,8 @@ take-home задание на аналитика в «Бамбук» (серви
 - `timeseries.md` — декомпозиция частоты бронирований
 - `bambuk_interview.ipynb` — всё вместе в ноутбуке
 
-## запуск
 
-```bash
 pip install -r requirements.txt
-python generator.py               # -> sample_bookings.csv
-python enrichment.py --dry-run    # без реальных запросов
-```
+python generator.py              
+python enrichment.py --dry-run   
+
