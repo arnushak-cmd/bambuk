@@ -6,6 +6,9 @@ from urllib.request import urlopen, Request
 
 from regex import parse
 
+# nominatim — бесплатный geocoding от osm, но просит не чаще 1 req/sec
+# open-meteo — погода, тоже бесплатно и без ключа
+
 
 def reverse_geocode(lat, lon):
     url = (
@@ -48,6 +51,7 @@ def to_float(s):
 
 
 def enrich_row(row, dry_run=False):
+    """добавляет country, city, temp_c, precip_mm"""
     lat = to_float(row["lat"])
     lon = to_float(row["lon"])
 
@@ -58,7 +62,7 @@ def enrich_row(row, dry_run=False):
     geo = reverse_geocode(lat, lon)
     row["country"] = geo["country"]
     row["city"] = geo["city"]
-    time.sleep(1.1)  # nominatim rate limit
+    time.sleep(1.1)
 
     weather = get_weather(lat, lon, row["checkin"])
     row["temp_c"] = weather["temp_c"]
@@ -66,6 +70,8 @@ def enrich_row(row, dry_run=False):
 
     return row
 
+
+# --dry-run чтоб не ждать апи, просто показывает план
 
 if __name__ == "__main__":
     dry_run = "--dry-run" in sys.argv
@@ -89,6 +95,7 @@ if __name__ == "__main__":
         enriched.append(r)
         print(f"  {i:>2}. {row['id']}  {row['checkin']}  -> {r.get('city','?')}, {r.get('temp_c','?')}°C")
 
+    # сохраняем с теми же ; что в оригинале
     out = "enriched_sample.csv"
     out_fields = [
         "id", "ipv6", "paid_at", "lon", "lat", "checkin", "checkout",
